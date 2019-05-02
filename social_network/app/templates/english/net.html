@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}WordNet@IRENE💗CATTAN{% endblock %}
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+{% block page_content %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/dist/echarts.min.js"></script>
+    <script type="text/javascript" src={{url_for('static',filename='dataTool.js')}}></script>
+    <meta charset="UTF-8">
+    <title>Politics</title>
+</head>
+<body>
+
+<div class="row" style="height:1000px">
+    <div class="col-md-3">
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header" style="font-size:18px ">最短路径</div>
+			  <div class="card-body">
+				<h4 class="card-title" style="font-size:18px ">
+					{% if data<0:%}
+						两点不连通
+					{%else:%}
+						{{data}}
+					{% endif %}
+				</h4>
+				<hr class="my-4">
+				<p class="card-text" style="font-size:18px ">{{node1}} <——> {{node2}}</p>
+			  </div>
+		</div>
+        <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						最短路径
+					</h3>
+				</div>
+				<div class="panel-body">
+					{% if data<0:%}两点不连通
+                    {%else:%}{{data}}
+                    {% endif %}
+				</div>
+                <div class="panel-footer">
+					 {{node1}} <————> {{node2}}
+				</div>
+
+			</div-->
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header" style="font-size:18px ">平均聚集系数</div>
+			  <div class="card-body">
+				<p class="card-text" style="font-size:18px ">{{aver}}</p>
+			  </div>
+		</div>
+        <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						平均聚集系数
+					</h3>
+				</div>
+				<div class="panel-body">
+					{{aver}}
+				</div>
+        </div-->
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header" style="font-size:18px ">结点{{node1}}的聚集系数</div>
+			  <div class="card-body">
+				<p class="card-text" style="font-size:18px ">{{pr1}}</p>
+			  </div>
+		</div>
+        <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+                        结点{{node1}}的聚集系数
+					</h3>
+				</div>
+				<div class="panel-body">
+					{{pr1}}
+				</div>
+        </div-->
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header" style="font-size:18px ">结点{{node2}}的聚集系数</div>
+			  <div class="card-body">
+				<p class="card-text" style="font-size:18px ">{{pr2}}</p>
+			  </div>
+		</div>
+         <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+                        结点{{node2}}的聚集系数
+					</h3>
+				</div>
+				<div class="panel-body">
+					{{pr2}}
+				</div>
+        </div-->
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header" style="font-size:18px ">结点{{node1}}的中心性</div>
+			  <div class="card-body">
+				<p class="card-text" style="font-size:18px ">{{c1}}</p>
+			  </div>
+		</div>
+        <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+                        结点{{node1}}的中心性
+					</h3>
+				</div>
+				<div class="panel-body">
+					{{c1}}
+				</div>
+        </div-->
+		<div class="card border-dark mb-3" style="max-width: 25rem;">
+			  <div class="card-header"  style="font-size:18px ">结点{{node2}}的中心性</div>
+			  <div class="card-body">
+				<p class="card-text" style="font-size:18px ">{{c2}}</p>
+			  </div>
+		</div>
+        <!--div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+                        结点{{node2}}的中心性
+					</h3>
+				</div>
+				<div class="panel-body">
+					{{c2}}
+				</div>
+        </div-->
+
+    </div>
+    <div class="col-md-9" id="main"  style="width:1800px"></div>
+</div>
+
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <!--<div id="main" style="width: 1000px;height:600px; background-color="black"></div>-->
+    <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var sNodes = new Array();
+    var c = 0;
+    var data = new Array();
+    {%for i in sNodes:%}
+        sNodes[c] = "{{i}}";
+        c = c + 1;
+    {%endfor%}
+
+    var flagF = false;
+    myChart.showLoading();
+    $.get("{{url_for('static',filename='netedge539purple.gexf')}}", function (xml) {
+        myChart.hideLoading();
+        var graph = echarts.dataTool.gexf.parse(xml);
+        data = graph.nodes.slice(0);
+        /*if(c == graph.nodes.length)
+        {
+        	flagF = true;
+        }*/
+        graph.nodes.forEach(function (node) {
+            node.size /= 3;
+            node.label = {
+                normal: {
+                    show: node.size > 0
+                }
+            };
+            var flag = true;
+            for(var i = 0;i < c+1;i++)
+            {
+                if(sNodes[i] == node.name)
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            var indexD = data.lastIndexOf(node);
+            if(flag)
+            {
+                data.splice(indexD,1);
+            }
+         });
+        option = {
+
+            tooltip: { },
+
+        series : [
+                    {
+                        type: 'graph',
+                        layout: 'none',
+                        data: data,
+                        links: graph.links,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        //highlight:!flagF,
+                        itemStyle: {
+                            normal: {
+                                borderColor: '#600',
+                                borderWidth: 1,
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.3)'
+                            }
+                        },
+
+                        lineStyle: {
+                            color: 'source',
+                            curveness: 0.1
+                        },
+                        emphasis: {
+                            lineStyle: {
+                                width: 10
+                            }
+                        }
+                    }
+            ]
+    };
+
+        myChart.setOption(option);
+    }, 'xml');
+    var cnt=-1;
+    var id1;
+    var id2;
+    var trans="";
+    myChart.on('click', function (params) {
+        cnt+=1;
+        if (params.dataType === 'node') {
+            if(cnt%2==0)
+            {
+                id1=params.data.name;
+            }
+            else
+            {
+                id2=params.data.name;
+                trans=id1+"_"+id2;
+                console.log(id1,id2,trans)
+                window.location = 'http://127.0.0.1:5000/english/netroute/'+trans+"";
+            }
+        }
+    });
+    /*if(!flagF)
+    {
+    	var myIndex = new Array();
+    	for(var i = 0; i < data.length;i++)
+    	{
+    		myIndex[i] = data[i].name
+    	}
+    	myChart.dispatchAction({
+			type: 'highlight',
+			seriesName: myIndex,
+		});
+    };*/
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}WordNet@IRENE💗CATTAN{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+       .tooltip{
+            position: absolute;
+            width: 190px;
+            height: auto;
+            font: 12px 'Microsoft YaHei',arial,tahoma,\5b8b\4f53,sans-serif;
+            text-align: left;
+            color: white;
+            border-width: 2px solid black;
+            background-color: black;
+            border-radius: 5px;
+         }
+
+         .tooltip:after{
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 20%;
+            margin-left: -8px;
+            width: 0;
+            height: 0;
+            border-bottom: 12px solid black;
+            border-right: 12px solid transparent;
+            border-left: 12px solid transparent;
+         }
+         .checkbox{
+            position:fixed;
+            left:20px;
+            bottom:250px;
+            width:400px;
+          }
+    </style>
+{% endblock %}
+{% block page_content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class = "checkbox">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+<div class="col-md-8">
+    {%if type=='a'%}
+        {%for item in data%}
+            <div class="jumbotron">
+                <h2 class="display-3">词意：</h2>
+                <p >{{item[0]}}</p>
+                <hr class="my-4">
+                <p>例句：</p>
+                <p>{{item[1][0]}}</p>
+            </div>
+         {% endfor %}
+    {% endif %}
+    {%if type=='b'%}
+    <svg id="force"></svg>
+
+    {% endif %}
+    <h1></h1>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+		var  width=(window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth)/3*2;
+		var  height=(window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight)*0.7;
+		var  img_h=50;
+		var  img_w=50;
+		var  radius=10;
+		var svg=d3.select("#force")
+		          .attr("width", width)
+                  .attr("height", height)
+
+		//var nodes= [{name:"Aegon",intro:"Targaryen"},{name:"Aemon",intro:"Lannister"},{name:"Aerys",intro:"Frey"},{name:"Alliser",intro:"Night's Watch"},{name:"Amory",intro:"Lannister"},{name:"Anguy",intro:"None"},{name:"Arya",intro:"Stark"},{name:"Balon",intro:"Lannister"},{name:"Barristan",intro:"Targaryen"},{name:"Belwas",intro:"Targaryen"},{name:"Beric",intro:"None"},{name:"Bowen",intro:"Night's Watch"},{name:"Bran",intro:"Stark"},{name:"Brienne",intro:"Stark"},{name:"Bronn",intro:"Lannister"},{name:"Brynden",intro:"Targaryen"},{name:"Catelyn",intro:"Stark"},{name:"Cersei",intro:"Lannister"},{name:"Chataya",intro:"None"},{name:"Craster",intro:"None"},{name:"Cressen",intro:"Baratheon"},{name:"Daario",intro:"Targaryen"},{name:"Daenerys",intro:"Targaryen"},{name:"Dalla",intro:"Wildling"},{name:"Davos",intro:"Baratheon"},{name:"Doran",intro:"Martell"},{name:"Drogo",intro:"Targaryen"},{name:"Eddard",intro:"Stark"},{name:"Eddison",intro:"Night's Watch"},{name:"Edmure",intro:"Tully"},{name:"Elia",intro:"None"},{name:"Ellaria",intro:"Martell"},{name:"Gendry",intro:"None"},{name:"Gilly",intro:"Wildling"},{name:"Gregor",intro:"Lannister"},{name:"Grenn",intro:"Night's Watch"},{name:"Hodor",intro:"Stark"},{name:"Hoster",intro:"Tully"},{name:"Illyrio",intro:"Targaryen"},{name:"Ilyn",intro:"Lannister"},{name:"Irri",intro:"Targaryen"},{name:"Jaime",intro:"Lannister"},{name:"Janos",intro:"None"},{name:"Jeor",intro:"Night's Watch"},{name:"Jeyne",intro:"Stark"},{name:"Joffrey",intro:"Lannister"},{name:"Jojen",intro:"Stark"},{name:"Jon",intro:"Lannister"},{name:"Jorah",intro:"Targaryen"},{name:"Karl",intro:"None"},{name:"Kevan",intro:"Lannister"},{name:"Kraznys",intro:"None"},{name:"Lancel",intro:"Lannister"},{name:"Loras",intro:"Tyrell"},{name:"Lothar",intro:"None"},{name:"Luwin",intro:"Stark"},{name:"Lysa",intro:"Arryn"},{name:"Mace",intro:"Tyrell"},{name:"Mance",intro:"Wildling"}];
+		//var edges= [{source:0,target:46,weight:1},{source:1,target:2,weight:1},{source:1,target:2,weight:1},{source:3,target:6,weight:2},{source:4,target:10,weight:2},{source:5,target:32,weight:6},{source:6,target:37,weight:1},{source:7,target:22,weight:1},{source:8,target:13,weight:3},{source:9,target:40,weight:7},{source:10,target:57,weight:1},{source:11,target:35,weight:10},{source:12,target:44,weight:1},{source:13,target:34,weight:1},{source:14,target:56,weight:3},{source:6,target:15,weight:5},{source:16,target:58,weight:5},{source:17,target:29,weight:2},{source:18,target:45,weight:1},{source:19,target:46,weight:5},{source:20,target:56,weight:7},{source:9,target:21,weight:10},{source:7,target:22,weight:1},{source:1,target:23,weight:8},{source:0,target:24,weight:1},{source:25,target:50,weight:3},{source:0,target:26,weight:6},{source:27,target:29,weight:2},{source:28,target:47,weight:9},{source:27,target:29,weight:2},{source:30,target:47,weight:5},{source:7,target:31,weight:2},{source:32,target:55,weight:4},{source:23,target:33,weight:17},{source:13,target:34,weight:1},{source:17,target:35,weight:8},{source:36,target:54,weight:3},{source:10,target:37,weight:1},{source:24,target:38,weight:8},{source:39,target:47,weight:6},{source:40,target:51,weight:1},{source:22,target:41,weight:3},{source:0,target:42,weight:1},{source:12,target:43,weight:13},{source:12,target:44,weight:1},{source:18,target:45,weight:1},{source:0,target:46,weight:1},{source:47,target:50,weight:3},{source:16,target:48,weight:8},{source:49,target:19,weight:7},{source:47,target:50,weight:3},{source:40,target:51,weight:1},{source:10,target:52,weight:4},{source:1,target:53,weight:5},{source:36,target:54,weight:3},{source:32,target:55,weight:4},{source:14,target:56,weight:3},{source:10,target:57,weight:1},{source:16,target:58,weight:5},{source:0,target:2,weight:1},{source:0,target:6,weight:1},{source:0,target:10,weight:2},{source:0,target:46,weight:2},{source:1,target:22,weight:6},{source:1,target:32,weight:1},{source:1,target:37,weight:1},{source:3,target:13,weight:3},{source:4,target:40,weight:7},{source:5,target:57,weight:1},{source:6,target:35,weight:10},{source:6,target:44,weight:1},{source:7,target:34,weight:1},{source:7,target:56,weight:3},{source:8,target:15,weight:5},{source:9,target:29,weight:5},{source:9,target:58,weight:2},{source:10,target:45,weight:1},{source:10,target:46,weight:5},{source:10,target:56,weight:7},{source:11,target:21,weight:10},{source:12,target:23,weight:8},{source:12,target:24,weight:1},{source:13,target:50,weight:3},{source:14,target:26,weight:6},{source:16,target:29,weight:2},{source:16,target:47,weight:9},{source:17,target:31,weight:5},{source:17,target:47,weight:2},{source:18,target:55,weight:4},{source:19,target:33,weight:17},{source:20,target:35,weight:8},{source:22,target:54,weight:3},{source:23,target:37,weight:1},{source:24,target:38,weight:8},{source:25,target:47,weight:6},{source:27,target:51,weight:1},{source:28,target:41,weight:3},{source:30,target:42,weight:1},{source:32,target:43,weight:13},{source:36,target:50,weight:3},{source:39,target:48,weight:8},{source:40,target:19,weight:7},{source:47,target:52,weight:4},{source:49,target:53,weight:5}];
+
+        var nodes=new Array();
+        var count=0;
+        {% for item in node %}
+        nodes[count]={name:"{{item[0]}}",intro:"{{item[1]}}"}
+        count++;
+        {% endfor %}
+
+         var edges=new Array();
+        var count=0;
+        {% for item in edge %}
+        var s=Number({{item[0]}});
+        console.log(s)
+
+        var e=Number({{item[1]}});
+        console.log(e)
+        edges[count]={source:s,target:e,weight:2}
+        count++;
+        {% endfor %}
+
+        console.log(edges)
+		var force=d3.layout.force()
+                .nodes(nodes)
+				.links(edges)
+				.size([width*0.8,height*1])
+				.linkDistance(function(d,i){
+					if(d.intro == "def")
+					{
+					    return 10;
+					 }
+					 return  10;
+				})
+				.linkStrength(function(d,i){
+					return d.weight/2;
+				})
+				.charge(function(d,i){
+					return -600+d.weight*25;
+				})
+                .start();
+        //提示框部分
+		var tooltip=d3.selectAll("body")
+                    .append("div")
+                    .attr("class","tooltip")
+                    .style("opacity",0.0);
+
+		var color=d3.scale.category20();
+
+		var lines=svg.selectAll(".forceLine")
+	             .data(edges)
+				 .enter()
+          	     .append("line")
+				 .attr("fill",function(d,i){
+					console.log(d);
+					return
+				 })
+				 .attr("class","forceLine")
+				 .style("stroke","gray")
+				 .style("opacity",0.4)
+                 .style("stroke-width",1);
+
+		var  radius=10;
+
+		var circles=svg.selectAll("forceCircle")
+	               .data(nodes)
+				   .enter()
+				   .append("circle")
+				   .attr("class","forceCircle")
+				   .attr("r",function(d,i){
+						if(d.name == nodes[0].name)
+						{
+						    return d.weight*2;
+						}
+						else
+						{
+						    if(d.intro == 'def')
+						    {
+						        return d.weight*2;
+						    }
+						    else{
+						        return 5;
+						    }
+						}
+
+				   })
+				   .style("stroke","None")
+				   .attr("fill",function(d,i){
+						if(d.intro == "def"){
+							return "#6d819c";
+						}
+						else{
+							return "#55967e";
+						}
+				   })
+					.on("mouseover",function(d,i){
+					if(d.intro=='def')
+					{
+					  tooltip.html(""+d.name)
+                               .style("left",(d3.event.pageX-40)+"px")
+                               .style("top",(d3.event.pageY+20)+"px")
+                               .style("opacity",1.0);
+					}
+					})
+					.on("mouseout",function(d){
+					tooltip.style("opacity",0.0);
+				    })
+				    .on("click",function(d){
+			         window.location = "http://127.0.0.1:5000/english/corpus/"+d.name+"";
+		            })
+	   			    .call(force.drag);
+
+	    var texts=svg.selectAll(".forceText")
+                 .data(nodes)
+				 .enter()
+				 .append("text")
+				 .attr("class","forceText")
+				 .attr("x",function(d){return d.x;})
+				 .attr("y",function(d){return d.y;})
+				 .style("stroke", "#336666")
+				 .style("stroke-family","仿宋")
+				 .style("font-size","10px")
+                 .attr("dx","-1.5em")
+				 .attr("dy","1em")
+				 .text(function(d){
+				 if(d.intro=='wd')
+				 {
+				    return d.name;
+				 }
+				 return ''
+				 })
+
+
+		force.on("tick",function(){
+	          lines.attr("x1",function(d){return d.source.x;});
+              lines.attr("y1",function(d){return d.source.y;});
+              lines.attr("x2",function(d){return d.target.x;});
+              lines.attr("y2",function(d){return d.target.y;});
+			  circles.attr("cx",function(d){return d.x;});
+			  circles.attr("cy",function(d){return d.y;});
+			  texts.attr("x",function(d){return d.x;});
+			  texts.attr("y",function(d){return d.y;});
+
+		});
+</script>
+
+{% endblock %}

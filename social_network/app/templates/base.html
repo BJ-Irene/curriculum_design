@@ -1,0 +1,93 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}社交网络{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link href="https://bootswatch.com/4/sketchy/bootstrap.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<style>
+    .checkbox{
+            position:fixed;
+            left:20px;
+          }
+</style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+
+  <div class="collapse navbar-collapse" id="navbarColor03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="navbar-brand" style = "font-size:30px" href="{{ url_for('english.cor') }}">WordNet    </a>
+      </li>
+      <li class="nav-item">
+          <a class="navbar-brand" style = "font-size:30px" href="{{ url_for('english.usa') }}">books    </a>
+      </li>
+         <a class="navbar-brand" style = "font-size:30px" href="{{ url_for('english.usa1') }}">Force </a>
+      </li>
+      <li class="nav-item">
+          <a class="navbar-brand" style = "font-size:30px" href="{{ url_for('english.net') }}">scientist    </a>
+      </li>
+      <li class="nav-item">
+          <a class="navbar-brand" style = "font-size:30px" href="{{ url_for('main.index') }}">About us  </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!--div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">社交网络</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('english.cor') }}">Wordnet</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('english.usa') }}">美国选举书籍信息</a></li>
+            </ul>
+             <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('english.net') }}">网络科学家社交关系</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div-->
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    {% if get_flashed_messages()[1] %}
+    <div class="alert alert-dismissible alert-warning">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4 class="alert-heading" style = "font-size:30px">Note:</h4>
+      <p class="mb-0" style = "font-size:20px">
+          {{ get_flashed_messages()[1] }}
+      </p>
+    </div>
+    <!--div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ get_flashed_messages()[1] }}
+    </div-->
+    {% endif %}
+{% block page_content %}{% endblock %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

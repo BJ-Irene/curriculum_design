@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}WordNet@IRENE💗CATTAN{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Politics</title>
+
+</head>
+<body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="jumbotron" >
+                <div style="margin:0px 0 0 250px">
+				  <img src = "{{url_for('static',filename='networks.svg')}}" width="500" height="500" alt="test"/>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+{% endblock %}

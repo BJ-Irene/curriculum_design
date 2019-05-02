@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}WordNet@IRENE💗CATTAN{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Politics</title>
+
+</head>
+<body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column" >
+
+                <div id = "abc" style="margin:0px 10px 100px -1000px">
+				  <!--img src = "{{url_for('static',filename='5.svg')}}" width="3000" height="2000" alt="test"/-->
+                </div>
+
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+    var main_chart_div = d3.select("#abc")
+
+    var svg;
+
+    d3.xml( "{{url_for('static',filename='5.svg')}}", function(error, documentFragment) {
+        if (error) {console.log(error); return;}
+
+       var svgNode = documentFragment
+                    .getElementsByTagName("svg")[0];
+        main_chart_div.node().appendChild(svgNode);
+        svg = main_chart_div.select("svg")
+
+
+    var id;
+
+
+
+    var x = svg.selectAll("circle")
+                .on("mouseover",function(d,i){
+                    var cur = d3.select(this);
+                    var this_cur_class = d3.select(this).attr("class")
+
+                    var n = svg.selectAll("circle")
+                                .attr("opacity",function(){
+                                    var this_n_class = d3.select(this).attr("class")
+                                    var flag = 0;
+                                    var e = svg.selectAll("path")
+                                               .attr("opacity",function(d,i){
+                                                    var this_e_class = d3.select(this).attr("class")
+                                                    if( this_e_class != (this_n_class + " " + this_cur_class) && this_e_class != ( this_cur_class+ " " + this_n_class)){
+                                                        flag = 1;
+                                                        return 0;
+                                                    }
+                                                    return 1;
+                                                })
+                                    if(flag){
+                                        return 0;
+                                    }
+                                    return 1;
+                                })
+
+
+                   // cur.attr("fill","black");
+                   // console.log(attr("class"))
+                })
+                .on("mouseout",function(d){
+
+                })
+
+
+                });
+
+
+
+
+
+
+</script>
+</body>
+</html>
+{% endblock %}

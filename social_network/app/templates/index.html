@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}基于wordnet的单词查询{% endblock %}
+
+{% block page_content %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-4 column">
+			<div class="jumbotron">
+				<h1>
+					Hello!
+				</h1>
+				<p>
+					这就是我们本次的社交网络作品，我们提供了源代码的下载地址。
+				</p>
+                <p>希望我们可以一起改进它。</p>
+				<p>
+					 <a class="btn btn-primary btn-large" href="https://github.com/BJ-Irene/SOCIAL">Download</a>
+				</p>
+			</div>
+		</div>
+		<div class="col-md-8 column">
+			<div class="carousel slide" id="carousel-88308">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-88308">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-88308">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-88308">
+					</li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item active">
+						<img alt="" src={{ url_for('static', filename='tan.jpg') }} />
+						<div class="carousel-caption">
+							<h4>
+								Cattan
+							</h4>
+							<p>
+								今晚上我想好好睡觉
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src={{ url_for('static', filename='cattt.png') }} />
+						<div class="carousel-caption">
+							<h4>
+								Cattan
+							</h4>
+							<p>
+								不然头发会掉
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src={{ url_for('static', filename='irene.jpg') }} />
+						<div class="carousel-caption">
+							<h4>
+								Irene
+							</h4>
+							<p>
+								可视化真有趣
+							</p>
+						</div>
+					</div>
+				</div> <a class="left carousel-control" href="#carousel-88308" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-88308" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}WordNet@IRENE💗CATTAN{% endblock %}
+{% block head %}
+    {{ super() }}
+	<style type="text/css">
+       .tooltip{
+            position: absolute;
+            width: 190px;
+            height: auto;
+            font: 12px 'Microsoft YaHei',arial,tahoma,\5b8b\4f53,sans-serif;
+            text-align: left;
+            color: white;
+            border-width: 2px solid black;
+            background-color: black;
+            border-radius: 5px;
+         }
+
+         .tooltip:after{
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 20%;
+            margin-left: -8px;
+            width: 0;
+            height: 0;
+            border-bottom: 12px solid black;
+            border-right: 12px solid transparent;
+            border-left: 12px solid transparent;
+         }
+         .checkbox{
+            position:fixed;
+            left:20px;
+            bottom:250px;
+            width:400px;
+          }
+    </style>
+{% endblock %}
+{% block page_content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Politics</title>
+
+</head>
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="jumbotron" >
+                <div id='container'>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+        var w = window.innerWidth||document.documentElement.clientWidth||docment.body.clientWidth;
+		var h = window.innerrHeight||document.documentElement.clientHeight||document.body.clientHeight;
+        var nodes = new Array();
+        var edges = new Array();
+        var c = 0;
+        {%for item in books:%}
+            nodes[c]={name:"{{item.name}}",intro:"{{item.sort}}"}
+            c = c+1;
+        {%endfor%}
+         c = 0
+        {%for item in edge:%}
+            edges[c]={source:{{item.source}},target:{{item.target}},weight:{{item.weight}}}
+            c = c+1;
+        {%endfor%}
+        var svg = d3.select('#container')
+					                .append('svg')
+					                .attr("id","mysvg")
+					                .attr('width',w)
+					                .attr('height',h)
+					                .attr('x',100);
+						var force=d3.layout.force()
+										.nodes(nodes)
+										.links(edges)
+										.size([w*0.6,h*0.6])
+										.linkDistance(function(d,i){
+											if(d.intro == "def")
+											{
+												return 10;
+											 }
+											 return  10;
+										})
+										.linkStrength(function(d,i){
+											return d.weight;
+										})
+										.charge(function(d,i){
+											return -600+d.weight*25;
+										})
+										.start();
+								//提示框部分
+								var tooltip=d3.selectAll("body")
+											.append("div")
+											.attr("class","tooltip")
+											.style("opacity",0.0);
+
+								var lines=svg.selectAll(".forceLine")
+										 .data(edges)
+										 .enter()
+										 .append("line")
+										 .attr("fill",function(d,i){
+											console.log(d);
+											return
+										 })
+										 .attr("class","forceLine")
+										 .style("stroke","gray")
+										 .style("opacity",0.4)
+										 .style("stroke-width",1);
+								var circles=svg.selectAll("forceCircle")
+										   .data(nodes)
+										   .enter()
+										   .append("circle")
+										   .attr("class","forceCircle")
+										   .style("stroke","None")
+										   .attr("r",function(d,i){
+												return d.weight/2;
+										   })
+										   .attr("fill",function(d,i){
+												if(d.intro == "n"){
+													return "#000000";
+												}
+												if(d.intro == "c"){
+													return "#9932CC";
+												}
+												else{
+													return "#55967e";
+												}
+										   })
+										   .attr("opacity",0.8)
+											.on("mouseover",function(d,i){
+												  tooltip.html(""+d.name)
+														   .style("left",(d3.event.pageX-40)+"px")
+														   .style("top",(d3.event.pageY+20)+"px")
+														   .style("opacity",1.0);
+											})
+											.on("mouseout",function(d){
+											tooltip.style("opacity",0.0);
+											})
+											.call(force.drag);
+								var texts=svg.selectAll(".forceText")
+								force.on("tick",function(){
+									  lines.attr("x1",function(d){return d.source.x;});
+									  lines.attr("y1",function(d){return d.source.y;});
+									  lines.attr("x2",function(d){return d.target.x;});
+									  lines.attr("y2",function(d){return d.target.y;});
+									  circles.attr("cx",function(d){return d.x;});
+									  circles.attr("cy",function(d){return d.y;});
+									  texts.attr("x",function(d){return d.x;});
+									  texts.attr("y",function(d){return d.y;});
+								});
+
+</script>
+</body>
+
+</html>
+{% endblock %}
